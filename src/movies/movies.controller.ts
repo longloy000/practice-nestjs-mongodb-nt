@@ -9,14 +9,14 @@ export class MoviesController {
     constructor(private movieSvc: MoviesService) {}
 
     @Get()
-     getMovies(@Res() res) {
-        const movies = this.movieSvc.getMovies();
+     async getMovies(@Res() res) {
+        const movies = await this.movieSvc.getMovies();
         return res.status(HttpStatus.OK).json(movies);
     }
 
     @Get(':movieID')
-     getMovie(@Res() res, @Param('movieID', new ValidateObjectId()) movieID) {
-        const fetchedMovie = this.movieSvc.getMovie(movieID);
+     async getMovie(@Res() res, @Param('movieID', new ValidateObjectId()) movieID) {
+        const fetchedMovie = await this.movieSvc.getMovie(movieID);
         if (!fetchedMovie) {
             throw new NotFoundException('Movie does not exist!');
         }
@@ -24,8 +24,8 @@ export class MoviesController {
     }
 
     @Post()
-     addMovie(@Res() res, @Body() createMovieDTO: CreateMovieDTO) {
-        const addedMovie = this.movieSvc.addMovie(createMovieDTO);
+     async addMovie(@Res() res, @Body() createMovieDTO: CreateMovieDTO) {
+        const addedMovie = await this.movieSvc.addMovie(createMovieDTO);
         return res.status(HttpStatus.OK).json({
             message: 'Movie has been successfully added!',
             movie: addedMovie,
